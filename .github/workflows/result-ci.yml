@@ -1,0 +1,79 @@
+name: Result CI
+
+on:
+  push:
+    branches:
+      - develop
+      - 'feature/**'
+      - 'release/**'
+      - 'hotfix/**'
+    paths:
+      - 'result/**'
+  pull_request:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'result/**'
+
+jobs:
+  build:
+    name: Install & Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: result/package-lock.json
+
+      - name: Install dependencies
+        working-directory: result
+        run: npm install
+
+      - name: Security audit
+        working-directory: result
+        run: npm audit --audit-level=high
+
+  docker:
+    name: Build & Push Docker Image
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push'
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}/result
+          tags: |
+            type=ref,event=branch
+            type=sha,prefix=sha-
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: result
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
