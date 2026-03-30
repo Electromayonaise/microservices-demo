@@ -10,7 +10,7 @@
 set -e
 
 GITHUB_USER=${1:-"electromayonaise"}
-BRANCH=${2:-"main"}
+BRANCH=${2:-"develop"}
 REPO="ghcr.io/${GITHUB_USER}/microservices-demo"
 
 VOTE_IMAGE="${REPO}/vote:${BRANCH}"
