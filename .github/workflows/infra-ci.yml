@@ -1,0 +1,79 @@
+name: Infrastructure CI
+
+on:
+  push:
+    branches:
+      - 'infra/**'
+      - develop
+    paths:
+      - 'infrastructure/**'
+      - 'vote/chart/**'
+      - 'result/chart/**'
+      - 'worker/chart/**'
+  pull_request:
+    branches:
+      - main
+      - 'infra/main'
+    paths:
+      - 'infrastructure/**'
+      - 'vote/chart/**'
+      - 'result/chart/**'
+      - 'worker/chart/**'
+
+jobs:
+  helm-lint:
+    name: Helm Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: 'latest'
+
+      - name: Lint infrastructure chart
+        run: helm lint infrastructure/
+
+      - name: Lint vote chart
+        run: helm lint vote/chart/
+
+      - name: Lint result chart
+        run: helm lint result/chart/
+
+      - name: Lint worker chart
+        run: helm lint worker/chart/
+
+  helm-template:
+    name: Helm Template Validation
+    runs-on: ubuntu-latest
+    needs: helm-lint
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: 'latest'
+
+      - name: Render infrastructure templates
+        run: helm template infrastructure infrastructure/
+
+      - name: Render vote templates
+        run: |
+          helm template vote vote/chart/ \
+            --set image=ghcr.io/placeholder/vote:latest
+
+      - name: Render result templates
+        run: |
+          helm template result result/chart/ \
+            --set image=ghcr.io/placeholder/result:latest
+
+      - name: Render worker templates
+        run: |
+          helm template worker worker/chart/ \
+            --set image=ghcr.io/placeholder/worker:latest

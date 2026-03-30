@@ -1,0 +1,49 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy to Kubernetes
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: '3.17.2'
+
+      - name: Set image tags
+        id: tags
+        run: |
+          echo "VOTE_IMAGE=ghcr.io/${{ github.repository }}/vote:main" >> $GITHUB_OUTPUT
+          echo "WORKER_IMAGE=ghcr.io/${{ github.repository }}/worker:main" >> $GITHUB_OUTPUT
+          echo "RESULT_IMAGE=ghcr.io/${{ github.repository }}/result:main" >> $GITHUB_OUTPUT
+
+      - name: Verify Helm charts
+        run: |
+          helm lint infrastructure/
+          helm lint vote/chart/
+          helm lint result/chart/
+          helm lint worker/chart/
+
+      - name: Deploy summary
+        run: |
+          echo "## Deploy Ready" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Images built and ready for deployment:" >> $GITHUB_STEP_SUMMARY
+          echo "- \`${{ steps.tags.outputs.VOTE_IMAGE }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- \`${{ steps.tags.outputs.WORKER_IMAGE }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- \`${{ steps.tags.outputs.RESULT_IMAGE }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Run \`scripts/deploy-local.sh\` to deploy to local kind cluster." >> $GITHUB_STEP_SUMMARY
