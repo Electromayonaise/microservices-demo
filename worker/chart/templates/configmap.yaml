@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: worker-config
+  labels:
+    app: worker
+data:
+  KAFKA_BROKER: "{{ .Values.config.kafkaHost }}:{{ .Values.config.kafkaPort }}"
+  KAFKA_TOPIC: "{{ .Values.config.kafkaTopic }}"
+  DB_HOST: "{{ .Values.config.dbHost }}"
+  DB_PORT: "{{ .Values.config.dbPort }}"
+  DB_NAME: "{{ .Values.config.dbName }}"
+  DB_USER: "{{ .Values.config.dbUser }}"

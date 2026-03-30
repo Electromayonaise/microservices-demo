@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: result-config
+  labels:
+    app: result
+data:
+  DB_HOST: "{{ .Values.config.dbHost }}"
+  DB_PORT: "{{ .Values.config.dbPort }}"
+  DB_NAME: "{{ .Values.config.dbName }}"
+  DB_USER: "{{ .Values.config.dbUser }}"
+  PORT: "{{ .Values.config.port }}"
