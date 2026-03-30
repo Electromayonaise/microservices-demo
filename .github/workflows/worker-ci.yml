@@ -35,7 +35,7 @@ jobs:
 
       - name: Download dependencies
         working-directory: worker
-        run: go mod download
+        run: go mod tidy && go mod download
 
       - name: Vet (static analysis)
         working-directory: worker
