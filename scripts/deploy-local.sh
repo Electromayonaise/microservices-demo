@@ -33,25 +33,25 @@ fi
 echo ""
 echo "[1/5] Deploying infrastructure (Kafka + PostgreSQL)..."
 helm upgrade --install infrastructure infrastructure/ \
-  --wait --timeout 3m
+  --wait --timeout 5m
 
 echo ""
 echo "[2/5] Deploying vote service..."
 helm upgrade --install vote vote/chart/ \
   --set image=${VOTE_IMAGE} \
-  --wait --timeout 2m
+  --wait --timeout 5m
 
 echo ""
 echo "[3/5] Deploying result service..."
 helm upgrade --install result result/chart/ \
   --set image=${RESULT_IMAGE} \
-  --wait --timeout 2m
+  --wait --timeout 5m
 
 echo ""
 echo "[4/5] Deploying worker service..."
 helm upgrade --install worker worker/chart/ \
   --set image=${WORKER_IMAGE} \
-  --wait --timeout 2m
+  --wait --timeout 5m
 
 echo ""
 echo "[5/5] Verifying deployment..."
