@@ -87,14 +87,15 @@ Límites de recursos (CPU y memoria) por servicio para aislar fallos y evitar qu
 
 ## 4. Diagrama de Arquitectura (15%)
 
-**[DIAGRAMA — PENDIENTE]**
-_El diagrama debe incluir:_
-- _Los 3 microservicios (vote, worker, result) y su flujo de datos (HTTP → Kafka → PostgreSQL → WebSocket)_
-- _La infraestructura de soporte: Kafka, PostgreSQL, Kubernetes (kind)_
-- _El registro de imágenes: ghcr.io_
-- _El pipeline CI/CD: GitHub Actions → ghcr.io → kind cluster_
-- _Las ramas de Git y cómo fluyen al pipeline (feature → develop → main → deploy)_
+[link al diagrama](https://drive.google.com/file/d/1VE8-4eg1-OgAHoyn4gc2xBMbKGFkjWXT/view?usp=sharing)
 
+![deployd](../images/deploymentDiagram.png)
+
+### Diagramas de los patrones implementados
+
+![bulkhead](../images/BulkheadSequence.jpeg)
+
+![ext](../images/externalSequence.jpeg)
 ---
 
 ## 5. Pipelines de Desarrollo (15%)

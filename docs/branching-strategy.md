@@ -18,7 +18,7 @@ en producción.
 
 | Rama | Propósito | Protección |
 |------|-----------|------------|
-| `main` | Código en producción. Cada commit representa una versión desplegada. | Solo merges desde `release/*` o `hotfix/*` vía PR aprobado |
+| `main` | Código en producción. Cada commit representa una versión desplegada. | Solo merges desde `develop/*` o `hotfix/*` vía PR aprobado |
 | `develop` | Rama de integración. Convergen todas las features antes de un release. | Solo merges desde `feature/*` o `release/*` vía PR |
 
 ### Ramas de soporte (temporales)
@@ -51,22 +51,6 @@ feature/   → nueva funcionalidad       ej: feature/result-websocket-reconnect
 bugfix/    → corrección en develop      ej: bugfix/kafka-timeout-handling
 hotfix/    → fix urgente en producción  ej: hotfix/vote-null-pointer-exception
 release/   → preparación de versión     ej: release/1.2.0
-```
-
-### Diagrama
-
-```
-main        ──────────────────────────────────●──────────────────────●──────
-                                             ↑ merge release/1.1.0  ↑ merge hotfix/...
-                                            /
-release/1.1.0               ──────────────●
-                           /               (solo bugfixes)
-develop     ────●──────────●──────────────────●────────────────────────────
-              ↑ merge    ↑ branch release    ↑ merge feature/B
-feature/A   ──●──●──●────╯
-feature/B                   ──────●──●──────╯
-hotfix/x                                            ─────●──────────────────
-                                                         ↑ branch desde main
 ```
 
 ---
