@@ -5,7 +5,7 @@ Desarrollada como parte del Taller 1 de construcción de pipelines en cloud.
 
 ## Arquitectura
 
-![Architecture diagram](architecture.png)
+![Architecture diagram](/images/deploymentDiagram.png)
 
 | Servicio | Tecnología | Descripción |
 |----------|-----------|-------------|
