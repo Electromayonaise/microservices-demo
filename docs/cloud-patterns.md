@@ -178,7 +178,7 @@ resources:
     cpu: "100m"     # mínimo garantizado
     memory: "256Mi"
   limits:
-    cpu: "500m"     # techo máximo
+    cpu: "700m"     # techo máximo
     memory: "512Mi"
 ```
 
@@ -197,9 +197,9 @@ resources:
 
 | Servicio | CPU Request | CPU Limit | Memoria Request | Memoria Limit |
 |----------|------------|-----------|----------------|--------------|
-| vote     | 100m       | 500m      | 256Mi          | 512Mi        |
-| worker   | 100m       | 250m      | 64Mi           | 128Mi        |
-| result   | 100m       | 250m      | 128Mi          | 256Mi        |
+| vote     | 100m       | 700m      | 256Mi          | 512Mi        |
+| worker   | 100m       | 500m      | 64Mi           | 128Mi        |
+| result   | 100m       | 500m      | 128Mi          | 256Mi        |
 
 Worker tiene límites menores porque es un binario Go compilado con huella de
 memoria mínima. Vote necesita más por la sobrecarga de la JVM.
